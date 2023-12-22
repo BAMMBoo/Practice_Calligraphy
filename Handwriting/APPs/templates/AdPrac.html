@@ -1,0 +1,107 @@
+{% extends 'layout.html' %}
+<!DOCTYPE html>
+{% load static %}
+{% block content %}
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>画板</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            ul, ol {
+                list-style: none;
+            }
+
+            #canvas {
+                position: relative;
+                float: right;
+                width: 800px;
+                height: 800px;
+                {#background: #C5C5C5;#}
+                display: block;
+                overflow: hidden;
+            }
+
+            .myImage {
+                bottom: 0;
+                width: 600px;
+                height: 600px;
+                position: absolute;
+                float: right;
+            }
+
+            .black-textbox {
+                background-color: black;
+                color: white;
+                text-align: left;
+                padding: 10px;
+                width: 600px;
+            }
+
+        </style>
+
+        <script>
+            let imagePaths = [
+                '{% static "skills/侧点.jpg" %}',
+                '{% static "skills/垂露竖.jpg" %}',
+            ];
+            let currentIndex = 0;
+
+            function changeImage() {
+                let image = document.getElementById('myImage');
+                currentIndex = (currentIndex + 1) % imagePaths.length;
+                image.src = imagePaths[currentIndex];
+            }
+        </script>
+
+    </head>
+    <body>
+    <button onclick="changeImage()">下一个字</button>
+    <div class="black-textbox">
+        <p>改进建议——{{ data.SkillName }}: {{ data.SkillDec}}</p>
+    </div>
+    <div>
+        <img src="{% static 'img/yong.jpg' %}" alt="germany" id="myImage" class="myImage">
+    </div>
+    <div>
+{#        <form method="post" enctype="multipart/form-data" action="{% url 'upload' %}">#}
+{#            {% csrf_token %}#}
+{#            {{ form }}#}
+{#            <button id="saveButton" style="float: right; width: 100px; height: 60px; top: 0">保存</button>#}
+{#        </form>#}
+        <button id="saveButton" style="float: right; width: 100px; height: 60px; top: 0">保存</button>
+        <form method="post" enctype="multipart/form-data" action="">
+            {% csrf_token %}
+            {{ form }}
+            <button style="float: right; width: 100px; height: 60px; top: 0">清除</button>
+        </form>
+        <canvas id="canvas"></canvas>
+        <script>
+            window.onload = function () {
+                var canvas = document.querySelector("#canvas");
+                if (canvas.getContext) {
+                    let ctx = canvas.getContext("2d");
+                    var img = new Image();
+                    img.src = "{% static 'img/written_txt.jpg' %}";
+                    img.onload = function () {
+                        draw();
+                    }
+                }
+                function draw() {
+                    var pattern = ctx.createPattern(img, "no-repeat")
+                    ctx.fillStyle = pattern;
+                    ctx.drawImage(img, 100, 0, 1200, 600)
+                }
+            }
+        </script>
+    </div>
+    <script src="{% static 'js/canvas-demo.js' %}"></script>
+{#    <script src="{% static 'js/myCanvas.js' %}"></script>#}
+    </body>
+    </html>
+{% endblock %}

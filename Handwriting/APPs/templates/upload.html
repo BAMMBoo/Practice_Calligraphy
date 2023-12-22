@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>上传</title>
+</head>
+<body>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <p>用户名：<input type="text" name="uname"></p>
+    <p>头像：<input type="text" name="icon"></p>
+    <p><button type="submit">上传图片</button></p>
+</form>
+</body>
+</html>
